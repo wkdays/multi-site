@@ -1,0 +1,77 @@
+services:
+  # 珍一润珍珠粉网站服务
+  zhenzhufen-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: zhenzhufen-website
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      - TZ=Asia/Shanghai
+      - NGINX_ENVSUBST_TEMPLATE_DIR=/etc/nginx/templates
+      - NGINX_ENVSUBST_OUTPUT_DIR=/etc/nginx/conf.d
+    volumes:
+      # 日志持久化
+      - ./logs/nginx:/var/log/nginx
+    networks:
+      - zhenzhufen-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.zhenzhufen.rule=Host(`zhenzhufen.yongli.wang`)"
+      - "traefik.http.routers.zhenzhufen.entrypoints=web"
+      - "traefik.http.services.zhenzhufen.loadbalancer.server.port=80"
+      - "com.docker.compose.project=zhenzhufen-website"
+      - "com.docker.compose.service=website"
+
+  # Nginx反向代理（可选，用于多服务部署）
+  nginx-proxy:
+    image: nginx:alpine
+    container_name: zhenzhufen-proxy
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    volumes:
+      - ./proxy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./logs/proxy:/var/log/nginx
+    depends_on:
+      - zhenzhufen-web
+    networks:
+      - zhenzhufen-network
+    profiles:
+      - proxy  # 使用 profile 控制是否启动
+
+  # 监控服务（可选）
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:0.11.0
+    container_name: zhenzhufen-exporter
+    restart: unless-stopped
+    ports:
+      - "9114:9113"
+    command:
+      - '-nginx.scrape-uri=http://zhenzhufen-web:80/nginx_status'
+    depends_on:
+      - zhenzhufen-web
+    networks:
+      - zhenzhufen-network
+    profiles:
+      - monitoring  # 使用 profile 控制是否启动
+
+networks:
+  zhenzhufen-network:
+    driver: bridge
+    name: zhenzhufen-website-network
+
+volumes:
+  # 数据持久化卷
+  nginx-logs:
+    driver: local
+  website-data:
+    driver: local

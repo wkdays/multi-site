@@ -1,0 +1,28 @@
+User-agent: *
+Allow: /
+
+# 搜索引擎优化
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 1
+
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# 禁止访问的目录
+Disallow: /assets/images/brand/
+Disallow: /*.css$
+Disallow: /*.js$
+
+# Sitemap位置
+Sitemap: https://zhenyirun.com/sitemap.xml
+
+# 主机信息
+Host: zhenyirun.com
+
+

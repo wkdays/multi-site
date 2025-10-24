@@ -8,6 +8,7 @@ services:
       depends_on:
         - site-318
         - site-dt
+        - site-zhenzhufen
       networks:
         - web-net
 
@@ -25,6 +26,18 @@ services:
 
     site-dt:
       build: ./dt  # 使用本地 Dockerfile 构建 site2
+      networks:
+        - web-net
+      healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost/health"]
+        interval: 30s
+        timeout: 10s
+        retries: 3
+        start_period: 40s
+      # 无 ports 映射
+
+    site-zhenzhufen:
+      build: ./zhenzhufen  # 使用本地 Dockerfile 构建 zhenzhufen
       networks:
         - web-net
       healthcheck:

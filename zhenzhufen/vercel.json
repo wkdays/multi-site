@@ -1,0 +1,48 @@
+{
+  "version": 2,
+  "name": "zhenzhufen",
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    },
+    {
+      "source": "/robots.txt",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/plain"
+        }
+      ]
+    },
+    {
+      "source": "/sitemap.xml",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/xml"
+        }
+      ]
+    }
+  ],
+  "routes": [
+    { "src": "/robots.txt", "dest": "src/robots.txt" },
+    { "src": "/sitemap.xml", "dest": "src/sitemap.xml" },
+    { "src": "/", "dest": "src/index.html" },
+    { "src": "/(.*)", "dest": "src/$1" }
+  ]
+}
+
