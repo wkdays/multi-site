@@ -1,6 +1,6 @@
 version: '3.8'
 
-  services:
+services:
     nginx:
       image: nginx:alpine
       ports:
@@ -25,6 +25,6 @@ version: '3.8'
         - web-net
       # 无 ports 映射
 
-  networks:
-    web-net:
-      driver: bridge
+networks:
+  web-net:
+    driver: bridge
