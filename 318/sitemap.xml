@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+  <!-- 主页 -->
+  <url>
+    <loc>https://318.yongli.wang/</loc>
+    <lastmod>2024-12-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://318.yongli.wang/assets/images/logo.svg</image:loc>
+      <image:title>新都桥旅行Logo</image:title>
+      <image:caption>新都桥旅行网站Logo</image:caption>
+    </image:image>
+  </url>
+  
+  <!-- 景点推荐页面 -->
+  <url>
+    <loc>https://318.yongli.wang/#destinations</loc>
+    <lastmod>2024-12-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://318.yongli.wang/assets/images/tagong01.jpg</image:loc>
+      <image:title>塔公草原日出</image:title>
+      <image:caption>新都桥塔公草原日出美景</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://318.yongli.wang/assets/images/jiagenba.jpg</image:loc>
+      <image:title>新都桥木雅藏寨</image:title>
+      <image:caption>新都桥木雅藏寨人文景观</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://318.yongli.wang/assets/images/yalxueshan.jpg</image:loc>
+      <image:title>木雅圣地雅拉雪山</image:title>
+      <image:caption>雅拉雪山圣洁之旅</image:caption>
+    </image:image>
+  </url>
+  
+  <!-- 藏式美食页面 -->
+  <url>
+    <loc>https://318.yongli.wang/#food</loc>
+    <lastmod>2024-12-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- 精品住宿页面 -->
+  <url>
+    <loc>https://318.yongli.wang/#stays</loc>
+    <lastmod>2024-12-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://318.yongli.wang/assets/images/hotel0.png</image:loc>
+      <image:title>柏曼酒店新都桥摄影天堂小镇</image:title>
+      <image:caption>新都桥柏曼酒店外观及山景</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://318.yongli.wang/assets/images/room01.png</image:loc>
+      <image:title>酒店大堂与藏式元素设计</image:title>
+      <image:caption>酒店大堂与藏式元素的融合设计</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://318.yongli.wang/assets/images/room02.png</image:loc>
+      <image:title>酒店周边贡嘎雪山及星空营地</image:title>
+      <image:caption>酒店周边贡嘎雪山及星空营地景观</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://318.yongli.wang/assets/images/room03.png</image:loc>
+      <image:title>酒店客房内景带有观景落地窗</image:title>
+      <image:caption>酒店客房内景带有观景落地窗</image:caption>
+    </image:image>
+  </url>
+  
+  <!-- 定制服务页面 -->
+  <url>
+    <loc>https://318.yongli.wang/#services</loc>
+    <lastmod>2024-12-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- 交通攻略页面 -->
+  <url>
+    <loc>https://318.yongli.wang/#transport</loc>
+    <lastmod>2024-12-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- 在线预订页面 -->
+  <url>
+    <loc>https://318.yongli.wang/#booking</loc>
+    <lastmod>2024-12-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- 联系我们页面 -->
+  <url>
+    <loc>https://318.yongli.wang/#contact</loc>
+    <lastmod>2024-12-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>

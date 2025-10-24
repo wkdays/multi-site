@@ -1,0 +1,66 @@
+# Git相关
+.git
+.gitignore
+.gitattributes
+
+# 文档文件
+README.md
+*.md
+!index.html
+
+# 开发工具
+.vscode
+.idea
+*.swp
+*.swo
+
+# 日志文件
+logs/
+*.log
+
+# 临时文件
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Node.js（如果有）
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python（如果有）
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+env/
+
+# 测试文件
+test/
+tests/
+*.test.js
+*.spec.js
+
+# 构建文件
+dist/
+build/
+coverage/
+
+# 环境配置
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Docker相关
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# 监控配置（可选）
+monitoring/
+proxy/

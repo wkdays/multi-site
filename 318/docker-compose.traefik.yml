@@ -1,0 +1,62 @@
+# Traefik 反向代理配置
+# 使用方法: docker-compose -f docker-compose.yml -f docker-compose.traefik.yml up -d
+
+version: '3.8'
+
+services:
+  # Traefik 反向代理
+  traefik:
+    image: traefik:v3.0
+    container_name: traefik
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"  # Traefik 仪表板
+    environment:
+      - TRAEFIK_API_DASHBOARD=true
+      - TRAEFIK_API_INSECURE=true
+      - TRAEFIK_PROVIDERS_DOCKER=true
+      - TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT=false
+      - TRAEFIK_ENTRYPOINTS_WEB_ADDRESS=:80
+      - TRAEFIK_ENTRYPOINTS_WEBSECURE_ADDRESS=:443
+      - TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_EMAIL=admin@yongli.wang
+      - TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_STORAGE=/letsencrypt/acme.json
+      - TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_HTTPCHALLENGE_ENTRYPOINT=web
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/letsencrypt:/letsencrypt
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+    networks:
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.318.yongli.wang`)"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.traefik.service=api@internal"
+
+  # 更新主服务配置以使用 Traefik
+  xinduqiao-travel:
+    extends:
+      file: docker-compose.yml
+      service: xinduqiao-travel
+    networks:
+      - xinduqiao-network
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.xinduqiao.rule=Host(`318.yongli.wang`)"
+      - "traefik.http.routers.xinduqiao.entrypoints=websecure"
+      - "traefik.http.routers.xinduqiao.tls.certresolver=letsencrypt"
+      - "traefik.http.services.xinduqiao.loadbalancer.server.port=80"
+      - "traefik.http.routers.xinduqiao-http.rule=Host(`318.yongli.wang`)"
+      - "traefik.http.routers.xinduqiao-http.entrypoints=web"
+      - "traefik.http.routers.xinduqiao-http.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true"
+
+networks:
+  traefik-network:
+    driver: bridge
+    name: traefik-network

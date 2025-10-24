@@ -1,0 +1,103 @@
+# 生产环境 Docker Compose 配置
+# 使用方法: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+version: '3.8'
+
+services:
+  xinduqiao-travel:
+    # 生产环境优化
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    
+    # 生产环境环境变量
+    environment:
+      - TZ=Asia/Shanghai
+      - NGINX_WORKER_PROCESSES=auto
+      - NGINX_WORKER_CONNECTIONS=2048
+      - LOG_LEVEL=warn
+    
+    # 生产环境卷挂载
+    volumes:
+      - ./logs/nginx:/var/log/nginx
+      # 生产环境配置文件（仅在文件存在时挂载）
+      # - ./config/nginx.prod.conf:/etc/nginx/nginx.conf:ro
+      # - ./config/default.prod.conf:/etc/nginx/conf.d/default.conf:ro
+      - website-data:/usr/share/nginx/html:ro
+    
+    # 生产环境网络配置
+    networks:
+      - xinduqiao-network
+      - traefik-network
+    
+    # 生产环境标签
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.xinduqiao.rule=Host(`318.yongli.wang`)"
+      - "traefik.http.routers.xinduqiao.entrypoints=websecure"
+      - "traefik.http.routers.xinduqiao.tls.certresolver=letsencrypt"
+      - "traefik.http.services.xinduqiao.loadbalancer.server.port=80"
+      - "traefik.docker.network=traefik-network"
+      - "com.docker.compose.project=xinduqiao-travel-prod"
+
+  # 生产环境监控
+  nginx-exporter:
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.1'
+        reservations:
+          memory: 64M
+          cpus: '0.05'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.metrics.rule=Host(`metrics.318.yongli.wang`)"
+      - "traefik.http.routers.metrics.entrypoints=websecure"
+      - "traefik.http.routers.metrics.tls.certresolver=letsencrypt"
+      - "traefik.http.services.metrics.loadbalancer.server.port=9113"
+
+  # 日志收集
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.11.0
+    container_name: xinduqiao-filebeat
+    restart: always
+    user: root
+    volumes:
+      - ./config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./logs/nginx:/var/log/nginx:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - ELASTICSEARCH_HOSTS=elasticsearch:9200
+      - KIBANA_HOST=kibana:5601
+    depends_on:
+      - xinduqiao-travel
+    networks:
+      - xinduqiao-network
+    profiles:
+      - logging
+
+networks:
+  traefik-network:
+    external: true
+
+volumes:
+  website-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}
