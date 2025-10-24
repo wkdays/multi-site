@@ -30,7 +30,6 @@ RUN mkdir -p /var/cache/nginx/client_temp \
 COPY index.html /usr/share/nginx/html/
 COPY assets/ /usr/share/nginx/html/assets/
 COPY docs/ /usr/share/nginx/html/docs/
-COPY src/ /usr/share/nginx/html/src/
 COPY styles.css /usr/share/nginx/html/
 COPY scripts.js /usr/share/nginx/html/
 COPY robots.txt /usr/share/nginx/html/
