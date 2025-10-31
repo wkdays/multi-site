@@ -9,6 +9,7 @@ services:
         - site-318
         - site-dt
         - site-zhenzhufen
+        - site-telegrambot
       networks:
         - web-net
 
@@ -47,6 +48,18 @@ services:
         retries: 3
         start_period: 40s
       # 无 ports 映射
+
+    site-telegrambot:
+      build: ./telegrambot  # 使用本地 Dockerfile 构建 telegrambot
+      networks:
+        - web-net
+      healthcheck:
+        test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"]
+        interval: 30s
+        timeout: 10s
+        retries: 3
+        start_period: 40s
+      # 无 ports 映射（通过 Nginx 转发）
 
 networks:
   web-net:
