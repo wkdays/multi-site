@@ -63,8 +63,8 @@ services:
       environment:
         - NODE_ENV=production
         - PORT=3000
-        - BOT_TOKEN=${BOT_TOKEN}
-        - DEEPL_API_KEY=${DEEPL_API_KEY}
+        - BOT_TOKEN=8350686455:AAFSjb-jtmY1boegkGJziIe8Yg3u8W1DID8
+        - DEEPL_API_KEY=6ceb6e86-9ae9-432e-b27f-9aeef851fb63:fx
 
 
 networks:
