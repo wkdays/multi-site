@@ -3,7 +3,27 @@ const express = require('express');
 const { Bot } = require("grammy");
 const { autoRetry } = require("@grammyjs/auto-retry");
 const deepl = require('deepl-node');
-const pLimit = require('p-limit').default;
+// 轻量并发限制器（替代 p-limit，避免 ESM 兼容问题）
+function createLimit(concurrency) {
+  let activeCount = 0;
+  const queue = [];
+  const next = () => {
+    if (activeCount >= concurrency || queue.length === 0) return;
+    const { task, resolve, reject } = queue.shift();
+    activeCount++;
+    Promise.resolve()
+      .then(task)
+      .then(resolve, reject)
+      .finally(() => {
+        activeCount--;
+        next();
+      });
+  };
+  return (fn) => new Promise((resolve, reject) => {
+    queue.push({ task: fn, resolve, reject });
+    next();
+  });
+}
 
 // Express 应用设置
 const app = express();
@@ -37,8 +57,8 @@ bot.api.config.use(autoRetry());
 // 初始化 DeepL 翻译器
 const translator = new deepl.Translator(process.env.DEEPL_API_KEY);
 
-// 限制并发翻译请求
-const limit = pLimit(1); // 减少并发数
+// 限制并发翻译请求（与原逻辑一致：并发 = 1）
+const limit = createLimit(1);
 
 // 翻译请求缓存
 const translationCache = new Map();
