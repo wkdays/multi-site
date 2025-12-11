@@ -1,0 +1,18 @@
+# New-API 数据库定时备份配置
+# 将以下内容添加到系统的 crontab 中
+# 命令: crontab -e
+
+# 每天凌晨 2 点执行数据库备份
+0 2 * * * cd /path/to/multi-site/new-api && ./backup.sh backup >> ./logs/cron.log 2>&1
+
+# 每周日凌晨 3 点执行完整备份（包括配置文件）
+0 3 * * 0 cd /path/to/multi-site/new-api && ./backup.sh backup && ./backup.sh backup >> ./logs/cron_weekly.log 2>&1
+
+# 每月 1 号凌晨 4 点执行月度备份并清理旧备份
+0 4 1 * * cd /path/to/multi-site/new-api && ./backup.sh backup && find ./backups -name "*.gz" -mtime +30 -delete >> ./logs/cron_monthly.log 2>&1
+
+# 每 6 小时检查数据库健康状态
+0 */6 * * * cd /path/to/multi-site && docker-compose exec site-newapi curl -f http://localhost:3000/health >> ./new-api/logs/health_check.log 2>&1 || echo "Database health check failed at $(date)" >> ./new-api/logs/health_check.log
+
+# 备份 cron 日志
+0 0 * * * find /path/to/multi-site/new-api/logs -name "cron*.log" -mtime +7 -delete

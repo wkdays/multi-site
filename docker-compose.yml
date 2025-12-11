@@ -78,10 +78,17 @@ services:
         retries: 3
         start_period: 40s
       # 无端口映射，仅内部访问
+      env_file:
+        - ./new-api/database.env
       environment:
         - TZ=Asia/Shanghai
+        - DB_TYPE=sqlite
+        - DB_PATH=/data/database.sqlite
+        - LOG_LEVEL=info
       volumes:
         - ./new-api:/data
+        - ./new-api/database:/app/database
+        - ./new-api/logs:/app/logs
 
 
 networks:
