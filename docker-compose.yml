@@ -10,6 +10,7 @@ services:
         - site-dt
         - site-zhenzhufen
         - site-telegrambot
+        - site-newapi
       networks:
         - web-net
 
@@ -65,6 +66,22 @@ services:
         - PORT=3000
         - BOT_TOKEN=8350686455:AAFSjb-jtmY1boegkGJziIe8Yg3u8W1DID8
         - DEEPL_API_KEY=6ceb6e86-9ae9-432e-b27f-9aeef851fb63:fx
+
+    site-newapi:
+      image: calciumion/new-api:latest
+      networks:
+        - web-net
+      healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+        interval: 30s
+        timeout: 10s
+        retries: 3
+        start_period: 40s
+      # 无端口映射，仅内部访问
+      environment:
+        - TZ=Asia/Shanghai
+      volumes:
+        - ./new-api:/data
 
 
 networks:

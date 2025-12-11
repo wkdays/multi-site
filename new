@@ -1,0 +1,6 @@
+我希望通过 nginx 反向代理安装一个 new-api 的 docker web 服务，
+通过域名 newapi.yongli.wang 来访问 new-api 服务管理端，
+我希望和 目录下的之前项目，如 318 、dt 项目一样。作为其中的一个服务部署在 docker 服务器上。
+禁止：不可以修改和影响其他已经运行的项目，不可以登录服务器；
+交互：你先分析，再一步一步确认，你不清楚的任何问题停下来问我，然后再继续。
+参考：new-api 应用参考安装说明：https://www.newapi.ai/en/docs/installation/deployment-methods/docker-installation
